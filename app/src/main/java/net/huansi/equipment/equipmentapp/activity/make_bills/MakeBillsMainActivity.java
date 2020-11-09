@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.res.Resources;
 import android.net.Uri;
 import android.os.Environment;
 import android.support.v4.app.FragmentActivity;
@@ -23,6 +24,7 @@ import net.huansi.equipment.equipmentapp.R;
 import net.huansi.equipment.equipmentapp.activity.BaseActivity;
 import net.huansi.equipment.equipmentapp.entity.HsWebInfo;
 import net.huansi.equipment.equipmentapp.entity.VideoEntity;
+import net.huansi.equipment.equipmentapp.helpers.LocaleHelper;
 import net.huansi.equipment.equipmentapp.listener.WebListener;
 import net.huansi.equipment.equipmentapp.util.NewRxjavaWebUtils;
 import net.huansi.equipment.equipmentapp.util.OthersUtil;
@@ -43,6 +45,9 @@ import static net.huansi.equipment.equipmentapp.util.SPHelper.USER_NO_KEY;
 public class MakeBillsMainActivity extends BaseActivity {
     @BindView(R.id.etInputBills) EditText etInputBills;
     @BindView(R.id.btnTransformPo) Button poChange;
+    TextView txtFepoCode,txtchartCheck,txtchangePO,txtin_outPut,
+            txtpiChecking,txtreportQuery,txtmeetingRecap,txtdownloadGSDVideo,
+            txtshowVideoGSD;
     private DownloadManager downloadManager;
     long reference;
     private LoadProgressDialog dialog;
@@ -56,7 +61,10 @@ public class MakeBillsMainActivity extends BaseActivity {
 
     @Override
     public void init() {
-        setToolBarTitle("款式信息");
+        //Resources resources = LocaleHelper.setLocale(this,(String)Paper.book().read("language")).getResources();
+        setToolBarTitle(getResources().getString(R.string.style_information));
+        initfindActivityID();
+        renderViewActivity();
         dialog=new LoadProgressDialog(this);
         Log.e("TAG","init");
         //下载任务
@@ -78,6 +86,35 @@ public class MakeBillsMainActivity extends BaseActivity {
 
     }
 
+    @Override
+    protected void attachBaseContext(Context base) {
+        super.attachBaseContext(LocaleHelper.onAttach(base));
+    }
+
+    private void initfindActivityID(){
+        txtFepoCode = (TextView)findViewById(R.id.etInputBills);
+        txtchartCheck = (TextView)findViewById(R.id.btnChart);
+        txtchangePO = (TextView)findViewById(R.id.btnTransformPo);
+        txtin_outPut = (TextView)findViewById(R.id.btnTargetYield);
+        txtpiChecking = (TextView)findViewById(R.id.unSeePDF);
+        txtreportQuery = (TextView)findViewById(R.id.btnViewPDF);
+        txtmeetingRecap = (TextView)findViewById(R.id.btnMeetingRecords);
+        txtdownloadGSDVideo = (TextView)findViewById(R.id.btnDownLoadVideo);
+        txtshowVideoGSD = (TextView)findViewById(R.id.btnViewVideo);
+    }
+
+    private void renderViewActivity(){
+        txtFepoCode.setHint(getResources().getString(R.string.fepo_code_input));
+        txtchartCheck.setText(getResources().getString(R.string.chart_report));
+        txtchangePO.setText(getResources().getString(R.string.transfer_po));
+        txtin_outPut.setText(getResources().getString(R.string.input_output));
+        txtpiChecking.setText(getResources().getString(R.string.pi_checking));
+        txtreportQuery.setText(getResources().getString(R.string.report_query));
+        txtmeetingRecap.setText(getResources().getString(R.string.meeting_recap));
+        txtdownloadGSDVideo.setText(getResources().getString(R.string.download_video_gsd_step));
+        txtshowVideoGSD.setText(getResources().getString(R.string.show_gsd_step));
+    }
+
 
 //    @OnClick(R.id.btnChart)
 //    void ChartTest(){
@@ -85,9 +122,10 @@ public class MakeBillsMainActivity extends BaseActivity {
 //    }
 
     @OnClick(R.id.btnDownLoadVideo)
-        void downLoadVideo() {
+    void downLoadVideo() {
+        //final Resources resources = LocaleHelper.setLocale(this,(String)Paper.book().read("language")).getResources();
         if (etInputBills.getText().toString().isEmpty()) {
-            OthersUtil.showTipsDialog(this, "请先输入款号后下载！");
+            OthersUtil.showTipsDialog(this, getResources().getString(R.string.please_input_fepo_first_before_download));
         } else {
             NewRxjavaWebUtils.getUIThread(NewRxjavaWebUtils.getObservable(MakeBillsMainActivity.this, hsWebInfo)
                             .map(new Func1<HsWebInfo, HsWebInfo>() {
@@ -115,8 +153,8 @@ public class MakeBillsMainActivity extends BaseActivity {
                                 //videoUrl.add(Environment.getExternalStorageDirectory().getPath()+"/"+data.get(i).getVIDEOURL());
                                 videoUrl.add(data.get(i).getVIDEOURL());
                             }
-                            
-                            OthersUtil.showTipsDialog(MakeBillsMainActivity.this, "确认下载吗？", new DialogInterface.OnClickListener() {
+
+                            OthersUtil.showTipsDialog(MakeBillsMainActivity.this, getResources().getString(R.string.download_video_confirm), new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
                                     startDownLoad();
@@ -126,7 +164,7 @@ public class MakeBillsMainActivity extends BaseActivity {
                         @Override
                         public void error(HsWebInfo hsWebInfo) {
                             Log.e("TAG", "error1=" + hsWebInfo.error.error);
-                            Toast.makeText(getApplicationContext(),"输入款号没有可下载视频！",Toast.LENGTH_LONG).show();
+                            Toast.makeText(getApplicationContext(),getResources().getString(R.string.not_have_video_can_download_input_machine_code),Toast.LENGTH_LONG).show();
                         }
                     });
         }
@@ -148,7 +186,7 @@ public class MakeBillsMainActivity extends BaseActivity {
             Uri uri = Uri.parse(path);
             DownloadManager.Request request = new DownloadManager.Request(uri);
             //通知栏的标题
-            request.setTitle("视频下载");
+            request.setTitle(getResources().getString(R.string.downloading_video));
             request.setVisibleInDownloadsUi(true ) ;
             //下载到哪个文件夹下，以及命名
             int index = path.lastIndexOf("/");
@@ -157,38 +195,39 @@ public class MakeBillsMainActivity extends BaseActivity {
             //File file = new File(fileName);
             //if (file.exists()){
             //    OthersUtil.showTipsDialog(this,"已经下载过了");
-           // }else {
-                //request.setDestinationInExternalFilesDir(getApplicationContext(), Environment.DIRECTORY_DOWNLOADS,fileName);
-                request.setDestinationInExternalPublicDir( subFolder,fileName);
-                //下载的唯一标识，可以用这个标识来控制这个下载的任务enqueue（）开始执行这个任务
-                reference = downloadManager.enqueue(request);
-          //  }
+            // }else {
+            //request.setDestinationInExternalFilesDir(getApplicationContext(), Environment.DIRECTORY_DOWNLOADS,fileName);
+            request.setDestinationInExternalPublicDir( subFolder,fileName);
+            //下载的唯一标识，可以用这个标识来控制这个下载的任务enqueue（）开始执行这个任务
+            reference = downloadManager.enqueue(request);
+            //  }
         }
     }
-//删除文件夹和文件夹里面的文件
-public static void deleteDir(final String pPath) {
-    File dir = new File(pPath);
-    deleteDirWihtFile(dir);
-}
-public static void deleteDirWihtFile(File dir) {
-    if (dir == null || !dir.exists() || !dir.isDirectory())
-        return;
-    for (File file : dir.listFiles()) {
-        if (file.isFile())
-            file.delete(); // 删除所有文件
-        else if (file.isDirectory())
-            deleteDirWihtFile(file); // 递规的方式删除文件夹
+    //删除文件夹和文件夹里面的文件
+    public static void deleteDir(final String pPath) {
+        File dir = new File(pPath);
+        deleteDirWihtFile(dir);
     }
-    dir.delete();// 删除目录本身
-}
+    public static void deleteDirWihtFile(File dir) {
+        if (dir == null || !dir.exists() || !dir.isDirectory())
+            return;
+        for (File file : dir.listFiles()) {
+            if (file.isFile())
+                file.delete(); // 删除所有文件
+            else if (file.isDirectory())
+                deleteDirWihtFile(file); // 递规的方式删除文件夹
+        }
+        dir.delete();// 删除目录本身
+    }
     @OnClick(R.id.unSeePDF)
     void intentUnSeePdf(){
         startActivity(new Intent(this,ShowUnSeePDFActivity.class));
     }
     @OnClick(R.id.btnViewPDF)
     void intentPDF(){
+        //Resources resources = LocaleHelper.setLocale(this,(String)Paper.book().read("language")).getResources();
         if (etInputBills.getText().toString().isEmpty()){
-            OthersUtil.showTipsDialog(this,"请先输入单号！");
+            OthersUtil.showTipsDialog(this,getResources().getString(R.string.please_input_bill_number));
         }else {
             Intent intent=new Intent(this,ShowPDFActivity.class);
             intent.putExtra("BillNumber",etInputBills.getText().toString());
@@ -198,7 +237,7 @@ public static void deleteDirWihtFile(File dir) {
     @OnClick(R.id.btnViewVideo)
     void intentVideo(){
         if (etInputBills.getText().toString().isEmpty()){
-            OthersUtil.showTipsDialog(this,"请先输入单号！");
+            OthersUtil.showTipsDialog(this,getResources().getString(R.string.please_input_bill_number));
         }else {
             Intent intent=new Intent(this,ShowVideoActivity.class);
             intent.putExtra("BillNumber",etInputBills.getText().toString());
@@ -208,7 +247,7 @@ public static void deleteDirWihtFile(File dir) {
     @OnClick(R.id.btnMeetingRecords)
     void intentRecords(){
         if (etInputBills.getText().toString().isEmpty()){
-            OthersUtil.showTipsDialog(this,"请先输入单号！");
+            OthersUtil.showTipsDialog(this,getResources().getString(R.string.please_input_bill_number));
         }else {
             Intent intent=new Intent(this,MakeBillsSecondActivity.class);
             intent.putExtra("BillNumber",etInputBills.getText().toString());
@@ -220,11 +259,11 @@ public static void deleteDirWihtFile(File dir) {
         public void onReceive(Context context, Intent intent) {
             String action = intent.getAction();
             if (action.equals(DownloadManager.ACTION_DOWNLOAD_COMPLETE)){
-               Toast.makeText(getApplicationContext(),"视频下载完毕！",Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(),getResources().getString(R.string.download_complete),Toast.LENGTH_LONG).show();
             }
             if (action.equals(DownloadManager.ACTION_NOTIFICATION_CLICKED)){
                 downloadManager.remove((Long)reference);
-                Log.e("TAG","下载完成");
+                Log.e("TAG",getResources().getString(R.string.download_complete));
             }
         }
     }
@@ -236,7 +275,7 @@ public static void deleteDirWihtFile(File dir) {
         startActivity(intent);
     }
 
-//    @OnClick(R.id.btnChangePo)
+    //    @OnClick(R.id.btnChangePo)
 //    void intentChangePo(){
 //        //转换款页面
 //        Intent intent=new Intent(this,ChangePoActivity.class);

@@ -11,6 +11,8 @@ public class SPHelper {
     public static final String USER_PWS="userPassword";//用户密码
 	public static final String INVENTORY_POWER_LEVEL="inventory_power_level";//盘点信号最大
 	public static final String IP_KEY="ip";
+	public static final String LANGUAGE_SETTING="language";
+	public static final String COMPANY_CODE="companyCode";
 
 
 

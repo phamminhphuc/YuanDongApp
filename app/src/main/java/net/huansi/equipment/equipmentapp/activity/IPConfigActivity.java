@@ -2,8 +2,10 @@ package net.huansi.equipment.equipmentapp.activity;
 
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
@@ -29,6 +31,7 @@ import net.huansi.equipment.equipmentapp.entity.HsWebInfo;
 import net.huansi.equipment.equipmentapp.entity.PwdDateInfo;
 import net.huansi.equipment.equipmentapp.entity.VersionEntity;
 import net.huansi.equipment.equipmentapp.entity.WsData;
+import net.huansi.equipment.equipmentapp.helpers.LocaleHelper;
 import net.huansi.equipment.equipmentapp.imp.SimpleHsWeb;
 import net.huansi.equipment.equipmentapp.listener.WebListener;
 import net.huansi.equipment.equipmentapp.util.JSONEntity;
@@ -61,7 +64,9 @@ import rx.functions.Func1;
 import rx.schedulers.Schedulers;
 
 import static net.huansi.equipment.equipmentapp.constant.Constant.PERMISSIONS;
+import static net.huansi.equipment.equipmentapp.util.SPHelper.COMPANY_CODE;
 import static net.huansi.equipment.equipmentapp.util.SPHelper.IP_KEY;
+import static net.huansi.equipment.equipmentapp.util.SPHelper.LANGUAGE_SETTING;
 import static net.huansi.equipment.equipmentapp.util.SPHelper.ROLE_CODE_KEY;
 import static net.huansi.equipment.equipmentapp.util.SPHelper.USER_NO_KEY;
 
@@ -81,6 +86,9 @@ public class IPConfigActivity extends BaseActivity {
     public int SHOW_ERROR=404;
     private LoadProgressDialog dialog;
     private Boolean pwdIsChange=false;
+    private Boolean langSelected = false;
+    TextView languageDialog,txtserveName,txtipConfirm;
+
     @Override
     protected int getLayoutId() {
         return R.layout.ip_config_activity;
@@ -88,20 +96,85 @@ public class IPConfigActivity extends BaseActivity {
 
     @Override
     public void init() {
+        //Resources resources = getResources();
         //etIPConfig.setText(SPHelper.getLocalData(getApplicationContext(),IP_KEY,String.class.getName(),"").toString());
         mPermissionsChecker = new PermissionsChecker(this);
         dialog=new LoadProgressDialog(this);
         mLoginAreaList=new ArrayList<>();
-        mLoginAreaList.add("苏州");
-        mLoginAreaList.add("越南nike");
-        mLoginAreaList.add("越南ads");
-        mLoginAdapter=new ArrayAdapter<>(getApplicationContext(),R.layout.string_item,R.id.text,mLoginAreaList);
+        mLoginAreaList.add("VSIP");
+        mLoginAreaList.add("BDP");
+//        mLoginAreaList.add("苏州");
+//        mLoginAreaList.add("越南nike");
+//        mLoginAreaList.add("越南ads");
+        mLoginAdapter=new ArrayAdapter<>(getApplicationContext(),R.layout.string_servername,R.id.server_name_string,mLoginAreaList);
         spIPConfig.setAdapter(mLoginAdapter);
 //        for (int i=0;i<mLoginAreaList.size();i++){
 //            spIPConfig.setSelection(i);
 //        }
         String user = SPHelper.getLocalData(getApplicationContext(), USER_NO_KEY, String.class.getName(), "").toString();
         checkPwdDeadline(user);
+        initFindViewByID();
+    }
+
+    /**
+     * Construct function language
+     */
+    private void initFindViewByID()
+    {
+        languageDialog = (TextView)findViewById(R.id.btnSelectLanguage);
+        txtserveName = (TextView)findViewById(R.id.server_name);
+        txtipConfirm = (TextView)findViewById(R.id.btnIPConfigOk);
+    }
+
+    @OnClick(R.id.btnSelectLanguage)
+    void changeLanguage(){
+        final String[] languageArray = {"English", "Vietnamese"};
+        final int checkItem;
+        if (langSelected){ checkItem = 0; }
+        else { checkItem = 1; }
+        final AlertDialog.Builder builder = new AlertDialog.Builder(IPConfigActivity.this);
+        builder.setTitle("Select a Language...").setSingleChoiceItems(languageArray, checkItem, new DialogInterface.OnClickListener(){
+            @Override
+            public void onClick(DialogInterface dialog, int which){
+                Toast.makeText(IPConfigActivity.this,"" + languageArray[which],Toast.LENGTH_SHORT).show();
+                languageDialog.setText(languageArray[which]);
+                mLoginAreaList.clear();
+                mLoginAdapter.clear();
+                if (languageArray[which].equals("English")){
+                    SPHelper.saveLocalData(getApplicationContext(), LANGUAGE_SETTING, "en", String.class.getName());
+                    renderViewActivity(SPHelper.getLocalData(getApplicationContext(), LANGUAGE_SETTING, String.class.getName(), "vi").toString());
+                    //OthersUtil.ToastMsg(IPConfigActivity.this,(String) Paper.book().read("language"));
+                }
+                if (languageArray[which].equals("Vietnamese")){
+                    SPHelper.saveLocalData(getApplicationContext(), LANGUAGE_SETTING, "vi", String.class.getName());
+                    renderViewActivity(SPHelper.getLocalData(getApplicationContext(), LANGUAGE_SETTING, String.class.getName(), "vi").toString());
+                    //OthersUtil.ToastMsg(IPConfigActivity.this,(String) Paper.book().read("language"));
+                }
+            }
+        }).setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+        builder.create().show();
+    }
+
+    private void renderViewActivity(String language){
+        Context context = LocaleHelper.setLocale(this, language);
+        Resources resources = context.getResources();
+        languageDialog.setText(resources.getString(R.string.select_language));
+        txtserveName.setText(resources.getString(R.string.serve_name));
+        txtipConfirm.setText(resources.getString(R.string.ip_confirm));
+
+        if (mLoginAreaList.isEmpty())
+        {
+            mLoginAreaList.add("VSIP");
+            mLoginAreaList.add("BDP");
+            mLoginAdapter=new ArrayAdapter<>(getApplicationContext(),R.layout.string_servername,R.id.server_name_string,mLoginAreaList);
+            spIPConfig.setAdapter(mLoginAdapter);
+            spIPConfig.setSelection(0);
+        }
     }
 
     private void checkPwdDeadline(String user) {
@@ -239,71 +312,71 @@ public class IPConfigActivity extends BaseActivity {
     @OnClick(R.id.btnIPConfigOk)
     void saveIP(){
         switch (mLoginAreaList.get(spIPConfig.getSelectedItemPosition())){
-            case "苏州":
-                SPHelper.saveLocalData(getApplicationContext(),IP_KEY,"10.17.111.23:8064",String.class.getName());//苏州
+            case "VSIP":
+                SPHelper.saveLocalData(getApplicationContext(), COMPANY_CODE, "7910", String.class.getName()); // VSIP 1 & 2
                 break;
-            case "越南nike":
-                SPHelper.saveLocalData(getApplicationContext(),IP_KEY,"10.17.215.203:8064",String.class.getName());//越南
-                break;
-            case "越南ads":
-                SPHelper.saveLocalData(getApplicationContext(),IP_KEY,"10.17.215.203:8065",String.class.getName());//越南
+            case "BDP":
+                SPHelper.saveLocalData(getApplicationContext(), COMPANY_CODE, "7920", String.class.getName()); // BDP
                 break;
         }
-        //startMainActivity();
+//        switch (mLoginAreaList.get(spIPConfig.getSelectedItemPosition())){
+//            case "VSIP":
+//                SPHelper.saveLocalData(getApplicationContext(),IP_KEY,"10.17.111.23:8064",String.class.getName());
+//                break;
+//        }
+        startMainActivity();
 
         //检查版本更新
-        String localVersionName = OthersUtil.getLocalVersionName(this);
-        OthersUtil.showLoadDialog(dialog);
-        NewRxjavaWebUtils.getUIThread(NewRxjavaWebUtils.getObservable(this,"")
-                .map(new Func1<String, HsWebInfo>() {
-                    @Override
-                    public HsWebInfo call(String s) {
-                        return NewRxjavaWebUtils.getJsonData(getApplicationContext(),"spAPPGet_APPMaxVersion", ""
-                                        ,String.class.getName(),false,"版本获取成功");
-                    }
-                })
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribeOn(Schedulers.io()), getApplicationContext(), dialog, new WebListener() {
-            @Override
-            public void success(HsWebInfo hsWebInfo) {
-                Log.e("TAG","successVersion="+hsWebInfo.json);
-                String json = hsWebInfo.json;
-                OthersUtil.dismissLoadDialog(dialog);
-                VersionEntity versionEntity = JSON.parseObject(json, VersionEntity.class);
-                List<VersionEntity.DATABean> data = versionEntity.getDATA();
-                int version = Integer.parseInt(data.get(0).getVERSION());
-                int localVersion = OthersUtil.getLocalVersion(getApplicationContext());
-                if (localVersion<version){
-                    AlertDialog.Builder builder = new AlertDialog.Builder(IPConfigActivity.this);// 自定义对话框
-                    builder.setIcon(R.drawable.app_icon);
-                    builder.setTitle("检测到新的更新");
-                    builder.setCancelable(false);
-                    builder.setMessage(data.get(0).getUPDATELOG().toString());
-                    builder.setPositiveButton("确认更新", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialogInterface, int i) {
-                            downLoadApk();
-                        }
-                    })
-                            .setNegativeButton("暂不更新", new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialogInterface, int i) {
-                                    startMainActivity();
-                                }
-                            }).create();
-                    builder.show();
-                }else {
-                    startMainActivity();
-                }
-            }
-            @Override
-            public void error(HsWebInfo hsWebInfo) {
-                Log.e("TAG","errorVersion="+hsWebInfo.json);
-                OthersUtil.ToastMsg(IPConfigActivity.this,"数据传输失败检查网络连接");
-            }
-        });
-
-
+//        String localVersionName = OthersUtil.getLocalVersionName(this);
+//        OthersUtil.showLoadDialog(dialog);
+//        NewRxjavaWebUtils.getUIThread(NewRxjavaWebUtils.getObservable(this,"")
+//                .map(new Func1<String, HsWebInfo>() {
+//                    @Override
+//                    public HsWebInfo call(String s) {
+//                        return NewRxjavaWebUtils.getJsonData(getApplicationContext(),"spAPPGet_APPMaxVersion", ""
+//                                        ,String.class.getName(),false,"版本获取成功");
+//                    }
+//                })
+//                .observeOn(AndroidSchedulers.mainThread())
+//                .subscribeOn(Schedulers.io()), getApplicationContext(), dialog, new WebListener() {
+//            @Override
+//            public void success(HsWebInfo hsWebInfo) {
+//                Log.e("TAG","successVersion="+hsWebInfo.json);
+//                String json = hsWebInfo.json;
+//                OthersUtil.dismissLoadDialog(dialog);
+//                VersionEntity versionEntity = JSON.parseObject(json, VersionEntity.class);
+//                List<VersionEntity.DATABean> data = versionEntity.getDATA();
+//                int version = Integer.parseInt(data.get(0).getVERSION());
+//                int localVersion = OthersUtil.getLocalVersion(getApplicationContext());
+//                if (localVersion<version){
+//                    AlertDialog.Builder builder = new AlertDialog.Builder(IPConfigActivity.this);// 自定义对话框
+//                    builder.setIcon(R.drawable.app_icon);
+//                    builder.setTitle("检测到新的更新");
+//                    builder.setCancelable(false);
+//                    builder.setMessage(data.get(0).getUPDATELOG().toString());
+//                    builder.setPositiveButton("确认更新", new DialogInterface.OnClickListener() {
+//                        @Override
+//                        public void onClick(DialogInterface dialogInterface, int i) {
+//                            downLoadApk();
+//                        }
+//                    })
+//                            .setNegativeButton("暂不更新", new DialogInterface.OnClickListener() {
+//                                @Override
+//                                public void onClick(DialogInterface dialogInterface, int i) {
+//                                    startMainActivity();
+//                                }
+//                            }).create();
+//                    builder.show();
+//                }else {
+//                    startMainActivity();
+//                }
+//            }
+//            @Override
+//            public void error(HsWebInfo hsWebInfo) {
+//                Log.e("TAG","errorVersion="+hsWebInfo.json);
+//                OthersUtil.ToastMsg(IPConfigActivity.this,"数据传输失败检查网络连接");
+//            }
+//        });
     }
     private void downLoadApk() {
         //显示下载进度

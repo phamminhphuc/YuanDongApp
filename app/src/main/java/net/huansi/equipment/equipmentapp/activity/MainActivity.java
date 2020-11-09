@@ -3,6 +3,7 @@ package net.huansi.equipment.equipmentapp.activity;
 import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -31,6 +32,7 @@ import net.huansi.equipment.equipmentapp.activity.version_control.VersionControl
 import net.huansi.equipment.equipmentapp.adapter.MainAdapter;
 import net.huansi.equipment.equipmentapp.entity.MainItem;
 import net.huansi.equipment.equipmentapp.entity.ReaderDevice;
+import net.huansi.equipment.equipmentapp.helpers.LocaleHelper;
 import net.huansi.equipment.equipmentapp.service.AlwaysRunningService;
 import net.huansi.equipment.equipmentapp.util.EPData;
 import net.huansi.equipment.equipmentapp.util.OthersUtil;
@@ -67,79 +69,87 @@ public class MainActivity extends BaseActivity {
     }
 
     @Override
+    protected void attachBaseContext(Context base) {
+        super.attachBaseContext(LocaleHelper.onAttach(base));
+    }
+
+    @Override
     public void init() {
         tvMainUserNo.setText(SPHelper.getLocalData(getApplicationContext(),USER_NO_KEY,String.class.getName(),"").toString());
         mList=new ArrayList<>();
-        String roleCode=SPHelper.getLocalData(getApplicationContext(),ROLE_CODE_KEY,String.class.getName(),"").toString().toUpperCase();
+        String roleCode = SPHelper.getLocalData(getApplicationContext(),ROLE_CODE_KEY,String.class.getName(),"").toString().toUpperCase();
         switch (roleCode){
-            case "A"://管理员账号
-                mList.add(new MainItem(R.drawable.icon_wifi,"版本","versionControl"));
-                mList.add(new MainItem(R.drawable.icon_hairpin,"发卡","sendCard"));
-                mList.add(new MainItem(R.drawable.icon_user_manage,"管理","manage"));
-                mList.add(new MainItem(R.drawable.icon_inventory,"盘点","inventory"));
-                mList.add(new MainItem(R.drawable.icon_repair,"维修","repair"));
-                mList.add(new MainItem(R.drawable.icon_check,"验货","check"));
-                mList.add(new MainItem(R.drawable.icon_loose,"松布","awake"));
-                mList.add(new MainItem(R.drawable.icon_movebox,"挪料","merge"));
-                mList.add(new MainItem(R.drawable.icon_fly,"拼块","BlockMaterial"));
-                mList.add(new MainItem(R.drawable.icon_style,"款式","designDescription"));
-                mList.add(new MainItem(R.drawable.icon_zoom,"品检","checkQuality"));
-                mList.add(new MainItem(R.drawable.icon_calling,"叫修","callRepair"));
-                mList.add(new MainItem(R.drawable.icon_bird,"流转","clothMoving"));
-                mList.add(new MainItem(R.drawable.icon_safari,"样检","measureSimple"));
-                mList.add(new MainItem(R.drawable.icon_barcode,"成品","storeGoods"));
-                mList.add(new MainItem(R.drawable.icon_browser,"登记","loggingBill"));
-                mList.add(new MainItem(R.drawable.icon_buray,"裁片","cutParts"));
+            case "2"://管理员账号 - Admin All permission
+                mList.add(new MainItem(R.drawable.icon_wifi,getResources().getString(R.string.version_app),"versionControl"));
+                mList.add(new MainItem(R.drawable.icon_hairpin,getResources().getString(R.string.issue_card),"sendCard"));
+                mList.add(new MainItem(R.drawable.icon_user_manage,getResources().getString(R.string.management_app),"manage"));
+                mList.add(new MainItem(R.drawable.icon_inventory,getResources().getString(R.string.inventory),"inventory"));
+                mList.add(new MainItem(R.drawable.icon_repair,getResources().getString(R.string.repair),"repair"));
+                mList.add(new MainItem(R.drawable.icon_check,getResources().getString(R.string.check),"check"));
+                mList.add(new MainItem(R.drawable.icon_loose,getResources().getString(R.string.relaxing_fabric),"awake"));
+                mList.add(new MainItem(R.drawable.icon_movebox,getResources().getString(R.string.move_material),"merge"));
+                mList.add(new MainItem(R.drawable.icon_fly,getResources().getString(R.string.block_material),"BlockMaterial"));
+                mList.add(new MainItem(R.drawable.icon_style,getResources().getString(R.string.style),"designDescription"));
+                mList.add(new MainItem(R.drawable.icon_zoom,getResources().getString(R.string.check_quality),"checkQuality"));
+                mList.add(new MainItem(R.drawable.icon_calling,getResources().getString(R.string.call_repair),"callRepair"));
+                mList.add(new MainItem(R.drawable.icon_bird,getResources().getString(R.string.transfer),"clothMoving"));
+                mList.add(new MainItem(R.drawable.icon_safari,getResources().getString(R.string.sample_check),"measureSimple"));
+                mList.add(new MainItem(R.drawable.icon_barcode,getResources().getString(R.string.finished_goods),"storeGoods"));
+                mList.add(new MainItem(R.drawable.icon_browser,getResources().getString(R.string.register),"loggingBill"));
+                mList.add(new MainItem(R.drawable.icon_buray,getResources().getString(R.string.cut_parts),"cutParts"));
                 mList.add(new MainItem(R.drawable.remind_icon,"Bom","bom"));
                 break;
-            case "B"://生产主管账号
+            case "16":
+                mList.add(new MainItem(R.drawable.icon_style,getResources().getString(R.string.style),"designDescription"));
+                break;
+            case "B"://生产主管账号 - Production/Leader Manager
                 //mList.add(new MainItem(R.drawable.icon_bird,"流转","clothMoving"));
-                mList.add(new MainItem(R.drawable.icon_hairpin,"发卡","sendCard"));
-                mList.add(new MainItem(R.drawable.icon_inventory,"盘点","inventory"));
-                mList.add(new MainItem(R.drawable.icon_repair,"维修","repair"));
+                mList.add(new MainItem(R.drawable.icon_hairpin,getResources().getString(R.string.issue_card),"sendCard"));
+                mList.add(new MainItem(R.drawable.icon_inventory,getResources().getString(R.string.inventory),"inventory"));
+                mList.add(new MainItem(R.drawable.icon_repair,getResources().getString(R.string.repair),"repair"));
                 break;
-            case "C"://盘点员
-                mList.add(new MainItem(R.drawable.icon_inventory,"盘点","inventory"));
-                mList.add(new MainItem(R.drawable.icon_repair,"维修","repair"));
+            case "C"://盘点员 - Machine Inventory User
+                mList.add(new MainItem(R.drawable.icon_inventory,getResources().getString(R.string.inventory),"inventory"));
+                mList.add(new MainItem(R.drawable.icon_repair,getResources().getString(R.string.repair),"repair"));
                 break;
-            case "D"://机修工
-                mList.add(new MainItem(R.drawable.icon_repair,"维修","repair"));
+            case "D"://机修工 - Machine Maintenance
+                mList.add(new MainItem(R.drawable.icon_repair,getResources().getString(R.string.repair),"repair"));
                 break;
-            case "E"://原料仓库、成品仓
-                mList.add(new MainItem(R.drawable.icon_barcode,"成品","storeGoods"));
-                mList.add(new MainItem(R.drawable.icon_check,"验货","check"));
-                mList.add(new MainItem(R.drawable.icon_movebox,"挪料","merge"));
+            case "E"://原料仓库、成品仓 - Finished Good and Material
+                mList.add(new MainItem(R.drawable.icon_barcode,getResources().getString(R.string.finished_goods),"storeGoods"));
+                mList.add(new MainItem(R.drawable.icon_check,getResources().getString(R.string.check),"check"));
+                mList.add(new MainItem(R.drawable.icon_movebox,getResources().getString(R.string.move_material),"merge"));
                 break;
-            case "F"://裁剪
-                mList.add(new MainItem(R.drawable.icon_loose,"松布","awake"));
-                mList.add(new MainItem(R.drawable.icon_zoom,"品检","checkQuality"));
-                mList.add(new MainItem(R.drawable.icon_style,"款式","designDescription"));
-                mList.add(new MainItem(R.drawable.icon_buray,"裁片","cutParts"));
-                mList.add(new MainItem(R.drawable.icon_fly,"拼块","BlockMaterial"));
+            case "F"://裁剪 - Cutting User
+                mList.add(new MainItem(R.drawable.icon_loose,getResources().getString(R.string.relaxing_fabric),"awake"));
+                mList.add(new MainItem(R.drawable.icon_zoom,getResources().getString(R.string.check_quality),"checkQuality"));
+                mList.add(new MainItem(R.drawable.icon_style,getResources().getString(R.string.style),"designDescription"));
+                mList.add(new MainItem(R.drawable.icon_buray,getResources().getString(R.string.cut_parts),"cutParts"));
+                mList.add(new MainItem(R.drawable.icon_fly,getResources().getString(R.string.block_material),"BlockMaterial"));
                 break;
-            case "G"://看制单,转换款信息填写
-                mList.add(new MainItem(R.drawable.icon_style,"款式","designDescription"));
-                mList.add(new MainItem(R.drawable.icon_calling,"叫修","callRepair"));
+            case "G"://看制单,转换款信息填写 - Look PI/Change Over key in User
+                mList.add(new MainItem(R.drawable.icon_style,getResources().getString(R.string.style),"designDescription"));
+                mList.add(new MainItem(R.drawable.icon_calling,getResources().getString(R.string.call_repair),"callRepair"));
                 break;
-            case "H"://工人叫修，查制单等资料
-                mList.add(new MainItem(R.drawable.icon_calling,"叫修","callRepair"));
-                mList.add(new MainItem(R.drawable.icon_style,"款式","designDescription"));
+            case "H"://工人叫修，查制单等资料 - Call machine repair/ Look PI
+                mList.add(new MainItem(R.drawable.icon_calling,getResources().getString(R.string.call_repair),"callRepair"));
+                mList.add(new MainItem(R.drawable.icon_style,getResources().getString(R.string.style),"designDescription"));
                 break;
-            case "I"://样衣流转
-                mList.add(new MainItem(R.drawable.icon_bird,"流转","clothMoving"));
-                mList.add(new MainItem(R.drawable.icon_style,"款式","designDescription"));
+            case "I"://样衣流转 - Sample garment transfer
+                mList.add(new MainItem(R.drawable.icon_bird,getResources().getString(R.string.transfer),"clothMoving"));
+                mList.add(new MainItem(R.drawable.icon_style,getResources().getString(R.string.style),"designDescription"));
                 break;
-            case "J"://样衣检验
-                mList.add(new MainItem(R.drawable.icon_safari,"样检","measureSimple"));
-                mList.add(new MainItem(R.drawable.icon_style,"款式","designDescription"));
+            case "J"://样衣检验 - Sample garment check
+                mList.add(new MainItem(R.drawable.icon_safari,getResources().getString(R.string.sample_check),"measureSimple"));
+                mList.add(new MainItem(R.drawable.icon_style,getResources().getString(R.string.style),"designDescription"));
                 break;
-            case "K"://app对点单
-                mList.add(new MainItem(R.drawable.icon_browser,"登记","loggingBill"));
-                mList.add(new MainItem(R.drawable.icon_style,"款式","designDescription"));
+            case "K"://app对点单 - App check
+                mList.add(new MainItem(R.drawable.icon_browser,getResources().getString(R.string.register),"loggingBill"));
+                mList.add(new MainItem(R.drawable.icon_style,getResources().getString(R.string.style),"designDescription"));
                 break;
         }
-        mList.add(new MainItem(R.drawable.icon_setting,"设置","setting"));
-        mList.add(new MainItem(R.drawable.icon_exit,"注销","exit"));
+        mList.add(new MainItem(R.drawable.icon_setting,getResources().getString(R.string.setting_app),"setting"));
+        mList.add(new MainItem(R.drawable.icon_exit,getResources().getString(R.string.exit_app),"exit"));
         mAdapter=new MainAdapter(mList,getApplicationContext());
         gvMain.setAdapter(mAdapter);
         //checkVersion();
@@ -151,12 +161,6 @@ public class MainActivity extends BaseActivity {
 //        startService(pushIntent);
 //        PollingUtils.startPollingService(this, 5, PushService.class, PushService.ALARM_SERVICE);
     }
-
-
-
-
-
-
 
     /**
      * 初始化盘点需要的数据以及设备信息
@@ -264,7 +268,7 @@ public class MainActivity extends BaseActivity {
 
     @Override
     public void back() {
-        OthersUtil.showChooseDialog(this, "确定退出？",
+        OthersUtil.showChooseDialog(this, getResources().getString(R.string.are_you_sure_exit),
                 new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {

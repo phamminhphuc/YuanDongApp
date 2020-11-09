@@ -21,9 +21,10 @@
             android:textSize="15sp"/>
         <include layout="@layout/line_vertical"/>
         <TextView
+            android:id="@+id/transformPOListLine"
             android:layout_width="match_parent"
             android:layout_height="80dp"
-            android:text="产线"
+            android:text="@string/line"
             android:textStyle="bold"
             android:textColor="@color/black"
             android:layout_weight="1"
@@ -31,9 +32,10 @@
             android:textSize="15sp"/>
         <include layout="@layout/line_vertical"/>
         <TextView
+            android:id="@+id/transferPOListDate"
             android:layout_width="match_parent"
             android:layout_height="80dp"
-            android:text="转款日期"
+            android:text="@string/transfer_date"
             android:textStyle="bold"
             android:textColor="@color/black"
             android:layout_weight="1"
@@ -41,9 +43,10 @@
             android:textSize="15sp"/>
         <include layout="@layout/line_vertical"/>
         <TextView
+            android:id="@+id/transferPOListBrant"
             android:layout_width="match_parent"
             android:layout_height="80dp"
-            android:text="品牌"
+            android:text="@string/brant"
             android:textStyle="bold"
             android:textColor="@color/black"
             android:layout_weight="1"

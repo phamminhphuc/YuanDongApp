@@ -17,6 +17,7 @@ import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.res.ColorStateList;
+import android.content.res.Resources;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.graphics.Bitmap.CompressFormat;
@@ -82,7 +83,7 @@ import static net.huansi.equipment.equipmentapp.constant.Constant.RFD8500;
 /**
  * Created by Administrator on 2016/5/3.
  */
-public class OthersUtil {
+public class OthersUtil{
 
 
 
@@ -600,7 +601,7 @@ public class OthersUtil {
      */
     public static void showLoadDialog(LoadProgressDialog dialog){
         if(dialog==null) return;
-        if(!dialog.isShowing()) dialog.showLoadDialog("加载中...");
+        if(!dialog.isShowing()) dialog.showLoadDialog("Loading...");
     }
 
 
@@ -776,7 +777,8 @@ public class OthersUtil {
         if(content==null||content.isEmpty()) return;
         AlertDialog.Builder builder=new AlertDialog.Builder(activity);
         builder.setMessage(content)
-                .setPositiveButton("确认", new OnClickListener() {
+                .setPositiveButton(activity.getResources().getString(R.string.confirm)
+                        , new OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         dialogInterface.dismiss();
@@ -796,7 +798,7 @@ public class OthersUtil {
         if(content==null||content.isEmpty()) return;
         AlertDialog.Builder builder=new AlertDialog.Builder(activity);
         builder.setMessage(content)
-                .setPositiveButton("确认", onClickListener)
+                .setPositiveButton(activity.getResources().getString(R.string.confirm), onClickListener)
                 .setCancelable(false)
                 .show();
     }
@@ -809,8 +811,8 @@ public class OthersUtil {
     public static void showChooseDialog(Activity activity, String content, OnClickListener listener){
         AlertDialog.Builder builder=new AlertDialog.Builder(activity);
         builder.setMessage(content)
-                .setPositiveButton("确认", listener)
-                .setNegativeButton("取消", new OnClickListener() {
+                .setPositiveButton(activity.getResources().getString(R.string.confirm), listener)
+                .setNegativeButton(activity.getResources().getString(R.string.cancel), new OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         dialogInterface.dismiss();
@@ -830,8 +832,8 @@ public class OthersUtil {
                                         OnClickListener okListener){
         AlertDialog.Builder builder=new AlertDialog.Builder(activity);
         builder.setMessage(content)
-                .setPositiveButton("确认", okListener)
-                .setNegativeButton("取消", cancelListener)
+                .setPositiveButton(activity.getResources().getString(R.string.confirm), okListener)
+                .setNegativeButton(activity.getResources().getString(R.string.cancel), cancelListener)
                 .setCancelable(false)
                 .show();
     }

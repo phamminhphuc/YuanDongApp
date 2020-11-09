@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--Base language string-->
+    <string name="app_name">Far Eastern Apparel Management</string>
+    <string name="net_no_active">Không có kết nối internet!!!</string>
+    <string name="connect_server_error">Kết nối máy chủ thất bại!!!</string>
+    <string name="webservice_no_query">Kết nối tới dịch vụ máy chủ thất bại!!!</string>
+    <string name="sent_confirm">Xác nhận gửi?</string>
+    <string name="sent_success">Gửi thành công!</string>
+    <string name="confirm">Xác nhận</string>
+    <string name="cancel">Hủy bỏ</string>
+    <string name="complete">Hoàn thành</string>
+    <string name="ok">Đồng ý</string>
+    <string name="line">Chuyền</string>
+    <string name="brant">Nhãn hiệu</string>
+    <string name="sent">Gửi</string>
+    <string name="modify">Sửa</string>
+    <string name="query">Truy vấn</string>
+    <string name="orderNumber">Mã đơn hàng</string>
+    <string name="remark">Nhận xét</string>
+    <string name="can_not_blank_value">Không được để trống giá trị</string>
+    <string name="delete_success">Xóa thành công</string>
+    <string name="type_value_not_correct">Thông tin nhập vào không chính xác</string>
+    <string name="successfully">Thành công!!!</string>
+    <!--Base language string-->
+
+    <!--IP Config Activity-->
+    <string name="select_language">Chọn Ngôn Ngữ</string>
+    <string name="serve_name">Máy chủ</string>
+    <string name="ip_confirm">Xác nhận</string>
+    <string name="nvERP">BDP</string>
+    <string name="avERP">VSIP</string>
+    <!--IP Config Activity-->
+
+    <!--Login Activity-->
+    <string name="usercode">Mã NV</string>
+    <string name="password">Mật khẩu</string>
+    <string name="type_usercode">Nhập mã nhân viên</string>
+    <string name="type_password">Nhập mật khẩu</string>
+    <string name="user_code_empty">Vui lòng nhập mã nhân viên!!!</string>
+    <string name="password_empty">Vui lòng nhập mật khẩu!!!</string>
+    <string name="fast_login">Đăng nhập nhanh(không cần mật khẩu)</string>
+    <string name="login">Đăng nhập</string>
+    <string name="please_check_usercode_password">Vui lòng kiểm tra lại mã đăng nhập hoặc mật khẩu!!!</string>
+    <!--Login Activity-->
+
+    <!--Main Activity-->
+    <string name="version_app">Phiên bản</string>
+    <string name="issue_card">Thẻ mã lỗi</string>
+    <string name="management_app">Quản lý</string>
+    <string name="inventory">Tồn kho</string>
+    <string name="repair">Sửa chữa</string>
+    <string name="check">Kiểm tra</string>
+    <string name="relaxing_fabric">Dàn trải vải</string>
+    <string name="move_material">Di chuyển nguyên liệu</string>
+    <string name="block_material">Khối nguyên liệu</string>
+    <string name="style">Style</string>
+    <string name="check_quality">Kiểm tra chất lượng</string>
+    <string name="call_repair">Gọi sửa chữa</string>
+    <string name="transfer">Chuyển</string>
+    <string name="sample_check">Kiểm tra hàng mẫu</string>
+    <string name="finished_goods">Thành phẩm</string>
+    <string name="register">Đăng ký</string>
+    <string name="cut_parts">Miếng cắt</string>
+    <string name="are_you_sure_exit">Bạn có chắc muốn thoát không?</string>
+    <string name="setting_app">Cài đặt</string>
+    <string name="exit_app">Thoát</string>
+    <!--Main Activity-->
+
+    <!--Make bills main activity-->
+    <string name="style_information">Thông tin style</string>
+    <string name="fepo_code_input">Nhập mã hàng FEPO</string>
+    <string name="chart_report">Biểu đồ báo cáo</string>
+    <string name="transfer_po">Chuyển mã hàng</string>
+    <string name="input_output">Nhập - Xuất</string>
+    <string name="pi_checking">Kiểm tra PI</string>
+    <string name="report_query">Truy vấn biểu mẫu</string>
+    <string name="meeting_recap">Ghi nhận cuộc họp</string>
+    <string name="download_video_gsd_step">Tải xuống video quy trình GSD</string>
+    <string name="show_gsd_step">Truy vấn quy trình GSD(có thể nhập 8 ký tự PO)</string>
+    <string name="downloading_video">Tải video xuống</string>
+    <string name="please_input_fepo_first_before_download">Vui lòng nhập FEPO trước khi tải xuống!</string>
+    <string name="download_video_confirm">Xác nhận tải xuống?</string>
+    <string name="please_input_bill_number">Vui lòng nhập mã số Bill trước!!!</string>
+    <string name="not_have_video_can_download_input_machine_code">Không có video có thể tải xuống để nhập số kiểu máy!</string>
+    <string name="download_complete">Hoàn thành tải xuống!</string>
+    <!--Make bills main activity-->
+
+    <!--PO transform activity-->
+    <string name="conversion">Chuyển đổi</string>
+    <string name="choice_a_team">Chọn nhóm</string>
+    <string name="transfer_date">Ngày chuyển đổi</string>
+    <string name="get_the_group_succes">Lấy được nhóm thành công</string>
+    <string name="please_type_fepo_or_group">Vui lòng nhập FEPO hoặc Nhóm, để biết ngày chuyển đổi!!!</string>
+    <string name="input_machine_number_and_group_success">Nhập mã máy đúng và đã lấy ngày của nhóm thành công</string>
+    <string name="input_fepo_or_group_not_correct">Nhập fepo hoặc nhóm không chính xác!!!</string>
+    <string name="have_space_empty_in_condition">Có khoảng trắng trong điều kiện nhập vào</string>
+    <string name="please_input_value">Vui lòng nhập giá trị</string>
+    <string name="KPI_actually">KPI thực tế</string>
+    <string name="please_input_a_specific_value">Vui lòng nhập giá trị cụ thể</string>
+    <string name="set_current_date_as_confirm_date">Đặt ngày hiện tại làm ngày xác nhận?</string>
+    <string name="please_type_a_description">Vui lòng nhập ghi chú</string>
+    <string name="please_type_a_content">Vui lòng nhập nội dung</string>
+    <string name="can_not_sent_while_fepo_or_date_empty">Không thể gửi khi mã hàng / ngày để trống!!!</string>
+    <string name="must_be_a_positive_integer_or_zero">Tỷ lệ phải là số nguyên dương hoặc 0</string>
+    <string name="project_title">Dự án</string>
+    <string name="KPI_target">KPI mục tiêu</string>
+    <string name="responsible_man">Tạo bởi</string>
+    <string name="date_in_advance">Ngày trước</string>
+    <string name="date_target_confirm">Ngày xác nhận mục tiêu</string>
+    <string name="date_actually_confirm">Ngày xác nhận thực tế</string>
+    <string name="Ps">Giải thích: Chuyển đổi PO áp dụng với PO giống hoặc khác nhau, mục tiêu đầu tiên CO là 3 phút, mục tiêu COPT = SMV mục tiêu + CO * Số người</string>
+    <string name="rate_actually">Tỷ lệ thực tế</string>
+    <string name="calculate_percent">Tính toán</string>
+    <string name="can_not_get_group">Lấy thông tin nhóm thất bại!!!</string>
+    <!--PO transform activity-->
+
+    <!--PO transfer list-->
+    <string name="po_list">Danh sách</string>
+    <string name="enter_here">Nhập vào đây</string>
+    <string name="to_be_delete_need_confirm">Để xóa đơn hàng này, vui lòng nhập mã xác nhận và nhấn OK</string>
+    <string name="get_information_success">Thông tin được lấy thành công</string>
+    <string name="process_pending_confirm">Chờ xử lý</string>
+    <!--PO transfer list-->
+
+    <!--android6.0权限-->
+    <string name="permission_settings">设置</string>
+    <string name="permission_help">帮助</string>
+    <string name="permission_string_help_text">当前应用缺少必要权限。\n\n请点击\"设置\"-\"权限\"-打开所需权限。\n\n最后点击两次后退按钮，即可返回。</string>
+    <string name="permission_quit">退出</string>
+    <string name="resume">生产履历表</string>
+    <string name="Products_show">款式图款式图</string>
+    <string name="season">季节:</string>
+    <string name="style_no">款号:</string>
+    <string name="category">类别:</string>
+    <string name="template">模板:</string>
+    <string name="technology">工艺:</string>
+    <string name="tools">辅助工具:</string>
+    <string name="equipment">特殊设备:</string>
+    <string name="parameter">设备参数:</string>
+    <string name="key_point">样板重点:</string>
+    <string name="sale_risk">销样风险:</string>
+    <string name="other">其他:</string>
+    <string name="process_video">工艺视频</string>
+    <string name="intact_link">PE完整视频链接</string>
+    <string name="link_error">链接地址有误!</string>
+    <string name="invalid_link">未上传视频或无效链接!</string>
+
+    <item type="id" name="tag_checked">checked</item>
+    <item type="id" name="tag_scan">scan</item>
+    <item type="id" name="tag_nono">nono</item>
+</resources>
